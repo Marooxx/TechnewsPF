@@ -10,7 +10,8 @@ require '../app/config.php';
 require '../W/globals.php';
 
 //instancie notre appli en lui passant la config et les routes
-$app = new W\App($w_routes, $w_config);
+$app = new W\App($w_routes, $w_config);// on récupère les routes et la config
+// si tout correspond apres  comparaison avec tableau des routes-> va contacter la view
 
 //exécute l'appli
-$app->run();
+$app->run();// c'est le front controller qui s'éxécute
