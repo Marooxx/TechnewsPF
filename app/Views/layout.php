@@ -1,4 +1,30 @@
+<?php
+use Model\News\CategorieModel;
+use Model\DB\DbFactory;
+$CM = new CategorieModel();
+$categories = $CM->getCategories();
+#debug($categories);
+//--
+
+# Iniatialisation
+DbFactory::start();
+
+# Récupération des Tags
+$tags = ORM::for_table('tags')->find_result_set();// renvoi les différents tags
+#debug($tags);
+
+#Récupération des 5 derniers articles de la BDD du plus récents au plus anciens
+$cinqDerniersArticles = ORM::for_table('view_articles')->order_by_asc('DATECREATIONARTICLE')->Limit(5)->find_result_set();
+
+#Récuperation des articles mis en avant
+$specialPost = ORM::for_table('view_articles')->where('SPECIALARTICLE',1)->find_result_set();
+#debug($specialPost);
+
+
+?>
 <!DOCTYPE html>
+
+
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -6,7 +32,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="congnd91">
-    <title>TEZ NEWS | Magagize & News HTML Template</title>
+
+    <title><?= $this->e($title);?></title>
     <!-- Favicons -->
     <link rel="shortcut icon" href="<?= $this->assetUrl('images/favicon.png'); ?>">
     <link rel="apple-touch-icon" href="<?= $this->assetUrl('images/apple-touch-icon-57x57.png'); ?>">
@@ -17,7 +44,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700" rel="stylesheet">
     <!-- Vender -->
-    <link href="<?php echo $this->assetUrl('css/font-awesome.min.css'); ?>" rel="stylesheet" />
+    <link href="<?= $this->assetUrl('css/font-awesome.min.css'); ?>" rel="stylesheet" />
     <link href="<?= $this->assetUrl('css/bootstrap.min.css'); ?>" rel="stylesheet" />
     <link href="<?= $this->assetUrl('css/normalize.min.css'); ?>" rel="stylesheet" />
     <link href="<?= $this->assetUrl('css/owl.carousel.min.css'); ?>" rel="stylesheet" />
@@ -48,10 +75,12 @@
     <nav class="menu-res hidden-lg hidden-md ">
     	<div class="menu-res-inner">
     		<ul>
-    			<li><a href="index.html">HOME</a></li>
-    			<li><a href="business.html">BUSINESS</a></li>
-    			<li><a href="computing.html"> COMPUTING</a></li>
-    			<li><a href="tech.html">TECH</a></li>
+            <?php foreach($categories as $categorie): ?>
+                    <li>
+                        <a href="#"><?= $categorie->getLIBELLECATEGORIE();?></a>
+                    </li>
+                    
+                    <?php endforeach; ?>
     		</ul>
     	</div>
     </nav>
@@ -74,18 +103,12 @@
     				<span>MENU</span>
     			</div>
     			<ul class="hidden-sm hidden-xs">
+                <?php foreach($categories as $categorie): ?>
     				<li>
-    					<a href="index.html">Accueil </a>
+    					<a href="#"><?= $categorie->getLIBELLECATEGORIE();?></a>
     				</li>
-    				<li>
-    					<a href="business.html">Business</a>
-    				</li>
-    				<li>
-    					<a href="computing.html">Computing</a>
-    				</li>
-    				<li>
-    					<a href="tech.html">Tech </a>
-    				</li>
+    				
+                    <?php endforeach; ?>
     			</ul>
     			<div class="search-icon">
     				<div class="search-icon-inner">
@@ -127,6 +150,8 @@
 
 
     		<!-- SIDEBAR -->
+        <?php include_once 'sidebar.inc.php';?>
+
 
      	</div> <!-- ./page -->
      </div> <!-- ./container -->
@@ -149,27 +174,21 @@
                     <div class="col-md-3 col-md-offset-1 col-sm-4 col-xs-12">
                         <h3>NOS CATEGORIES</h3>
                         <ul class="list-category">
-                            <li><a href="index.html">Accueil</a></li>
-                            <li><a href="business.html">Business</a></li>
-                            <li><a href="computing.html">Computing</a></li>
-                            <li><a href="tech.html">Tech</a></li>
+                        <?php foreach($categories as $categorie):// on créé une boucle pour récupérer tous les tags ?>
+                    <li>
+                        <a href="#"><?= $categorie->getLIBELLECATEGORIE();?></a>
+                    </li>
+                    
+                    <?php endforeach; ?>
                         </ul>
                     </div>
                     <div class="col-md-3 col-md-offset-1 col-sm-4 col-xs-12">
                         <h3>RECHERCHE PAR TAGS</h3>
 
                         <div class="list-tags">
-                            <a href="#">iPhone 7</a>
-                            <a href="#">News</a>
-                            <a href="#">Sport</a>
-                            <a href="#">Apple</a>
-                            <a href="#">Alcatel</a>
-                            <a href="#">Pixi 4</a>
-                            <a href="#">Elon Musk </a>
-                            <a href="#">Smart phone</a>
-                            <a href="#">Nexus</a>
-                            <a href="#">Canvas</a>
-
+                        <?php foreach($tags as $tag) : ?>
+                            <a href="#"><?= $tag->LIBELLETAGS; ?></a>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>

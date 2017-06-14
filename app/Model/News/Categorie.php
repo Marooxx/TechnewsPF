@@ -21,17 +21,17 @@ class Categorie //extends \W\Model\Model
 
 
                 # GETTERS #
-    public function getIDCATEGORIE
+    public function getIDCATEGORIE()
     {
         return $this->IDCATEGORIE;
     }
 
-    public function getLIBELLECATEGORIE
+    public function getLIBELLECATEGORIE()
     {
         return $this->LIBELLECATEGORIE;
     }
 
-    public function getROUTECATEGORIE
+    public function getROUTECATEGORIE()
     {
         return $this->ROUTECATEGORIE;
     }
