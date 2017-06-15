@@ -7,7 +7,7 @@ class Categorie //extends \W\Model\Model
             $LIBELLECATEGORIE,
             $ROUTECATEGORIE;
 
-    function __construct($IDCATEGORIE,$LIBELLECATEGORIE,$ROUTECATEGORIE)
+    function __construct($IDCATEGORIE,$LIBELLECATEGORIE,$ROUTECATEGORIE=null)
     {
 
 
