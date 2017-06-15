@@ -1,39 +1,47 @@
-<?php
-use Model\News\CategorieModel;
-use Model\DB\DbFactory;
-$CM = new CategorieModel();
-$categories = $CM->getCategories();
-#debug($categories);
-//--
+<?php 
 
-# Iniatialisation
-DbFactory::start();
+    use Model\News\CategorieModel;
+    use Model\Db\dbFactory;
 
-# Récupération des Tags
-$tags = ORM::for_table('tags')->find_result_set();// renvoi les différents tags
-#debug($tags);
-
-#Récupération des 5 derniers articles de la BDD du plus récents au plus anciens
-$cinqDerniersArticles = ORM::for_table('view_articles')->order_by_asc('DATECREATIONARTICLE')->Limit(5)->find_result_set();
-
-#Récuperation des articles mis en avant
-$specialPost = ORM::for_table('view_articles')->where('SPECIALARTICLE',1)->find_result_set();
-#debug($specialPost);
-
-
+    $CM = new CategorieModel();
+    $categories = $CM->getCategories();
+    #debug($categories);
+    
+    // --
+    
+    # Initialisation de la Connexion
+    DbFactory::start();
+    
+    # Récupération des Tags
+    $tags = ORM::for_table('tags')->find_result_set();
+    #debug($tags);
+    
+    # Récupération des 5 derniers articles du plus récent au plus ancien.
+    $cinqDerniersArticles = ORM::for_table('view_articles')
+                                ->limit(5)
+                                ->order_by_desc('DATECREATIONARTICLE')
+                                ->find_result_set();
+    
+    #debug($cinqDerniersArticles);
+    
+    # Récupération des Articles en Avant
+    $specialArticles = ORM::for_table('view_articles')
+                           ->where('SPECIALARTICLE', 1)
+                            ->find_result_set();
+							
+							
+	
+    
 ?>
 <!DOCTYPE html>
-
-
-<html lang="en">
+<html lang="fr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="congnd91">
-
-    <title><?= $this->e($title);?></title>
+    <meta name="author" content="Hugo LIEGEARD">
+    <title><?= $this->e($title); ?></title>
     <!-- Favicons -->
     <link rel="shortcut icon" href="<?= $this->assetUrl('images/favicon.png'); ?>">
     <link rel="apple-touch-icon" href="<?= $this->assetUrl('images/apple-touch-icon-57x57.png'); ?>">
@@ -44,13 +52,13 @@ $specialPost = ORM::for_table('view_articles')->where('SPECIALARTICLE',1)->find_
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700" rel="stylesheet">
     <!-- Vender -->
-    <link href="<?= $this->assetUrl('css/font-awesome.min.css'); ?>" rel="stylesheet" />
+    <link href="<?php echo $this->assetUrl('css/font-awesome.min.css'); ?>" rel="stylesheet" />
     <link href="<?= $this->assetUrl('css/bootstrap.min.css'); ?>" rel="stylesheet" />
     <link href="<?= $this->assetUrl('css/normalize.min.css'); ?>" rel="stylesheet" />
     <link href="<?= $this->assetUrl('css/owl.carousel.min.css'); ?>" rel="stylesheet" />
     <!-- Main CSS (SCSS Compile) -->
     <link href="<?= $this->assetUrl('css/main.css'); ?>" rel="stylesheet" />
-    <?= $this->section('css');?>
+    <?= $this->section('css'); ?>
     <!-- JavaScripts -->
     <!--<script src="<?= $this->assetUrl('js/modernizr.js'); ?>"></script>-->
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -66,21 +74,21 @@ $specialPost = ORM::for_table('view_articles')->where('SPECIALARTICLE',1)->find_
         <div class="loading-wrapper">
         </div>
     </div>
-
-    <!-- -----------------------------------------
+    
+    <!-- ----------------------------------------- 
                     DEBUT DU MENU
      ----------------------------------------- -->
-
+     
      <!--menu mobile-->
     <nav class="menu-res hidden-lg hidden-md ">
     	<div class="menu-res-inner">
     		<ul>
-            <?php foreach($categories as $categorie): ?>
-                    <li>
-                        <a href="#"><?= $categorie->getLIBELLECATEGORIE();?></a>
-                    </li>
-                    
-                    <?php endforeach; ?>
+				<li><a href="#">ACCUEIL</a></li>
+    			<?php foreach ($categories as $categorie) : ?>
+    				<li>
+    					<a href="#"><?= $categorie->getLIBELLECATEGORIE(); ?></a>
+    				</li>
+				<?php endforeach; ?>
     		</ul>
     	</div>
     </nav>
@@ -103,12 +111,12 @@ $specialPost = ORM::for_table('view_articles')->where('SPECIALARTICLE',1)->find_
     				<span>MENU</span>
     			</div>
     			<ul class="hidden-sm hidden-xs">
-                <?php foreach($categories as $categorie): ?>
-    				<li>
-    					<a href="#"><?= $categorie->getLIBELLECATEGORIE();?></a>
-    				</li>
-    				
-                    <?php endforeach; ?>
+				<li><a href="#">ACCUEIL</a></li>
+    				<?php foreach ($categories as $categorie) : ?>
+        				<li>
+        					<a href="#"><?= $categorie->getLIBELLECATEGORIE(); ?></a>
+        				</li>
+    				<?php endforeach; ?>
     			</ul>
     			<div class="search-icon">
     				<div class="search-icon-inner">
@@ -120,43 +128,21 @@ $specialPost = ORM::for_table('view_articles')->where('SPECIALARTICLE',1)->find_
     				</div>
     			</div>
     		</nav>
-
-    <!-- -----------------------------------------
+    		
+    <!-- ----------------------------------------- 
                       FIN DU MENU
      ----------------------------------------- -->
-
+     
     		<!-- CONTENU DU SITE -->
-        <?= $this->section('contenu'); ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    		<?= $this->section('contenu'); ?>
+    		
     		<!-- SIDEBAR -->
-        <?php include_once 'sidebar.inc.php';?>
-
-
+    		<?php include_once 'sidebar.inc.php'; ?>
+    		
      	</div> <!-- ./page -->
-     </div> <!-- ./container -->
-
-     <!-- -----------------------------------------
+     </div> <!-- ./container --> 
+     
+     <!-- ----------------------------------------- 
                   DEBUT DU PIED DE PAGE
      ----------------------------------------- -->
         <!--footer-->
@@ -174,20 +160,19 @@ $specialPost = ORM::for_table('view_articles')->where('SPECIALARTICLE',1)->find_
                     <div class="col-md-3 col-md-offset-1 col-sm-4 col-xs-12">
                         <h3>NOS CATEGORIES</h3>
                         <ul class="list-category">
-                        <?php foreach($categories as $categorie):// on créé une boucle pour récupérer tous les tags ?>
-                    <li>
-                        <a href="#"><?= $categorie->getLIBELLECATEGORIE();?></a>
-                    </li>
-                    
-                    <?php endforeach; ?>
+                            <?php foreach ($categories as $categorie) : ?>
+                				<li>
+                					<a href="#"><?= $categorie->getLIBELLECATEGORIE(); ?></a>
+                				</li>
+            				<?php endforeach; ?>
                         </ul>
                     </div>
                     <div class="col-md-3 col-md-offset-1 col-sm-4 col-xs-12">
                         <h3>RECHERCHE PAR TAGS</h3>
 
                         <div class="list-tags">
-                        <?php foreach($tags as $tag) : ?>
-                            <a href="#"><?= $tag->LIBELLETAGS; ?></a>
+                        	<?php foreach ($tags as $tag) : ?>
+                            	<a href="#"><?= $tag->LIBELLETAGS; ?></a>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -237,16 +222,34 @@ $specialPost = ORM::for_table('view_articles')->where('SPECIALARTICLE',1)->find_
                 </div>
             </div>
         </footer>
-
-    <!-- -----------------------------------------
+    
+    <!-- ----------------------------------------- 
                   FIN DU PIED DE PAGE
      ----------------------------------------- -->
-
+     
     <!--script file-->
     <script src="<?= $this->assetUrl('js/jquery.min.js'); ?>"></script>
     <script src="<?= $this->assetUrl('js/bootstrap.js'); ?>"></script>
     <script src="<?= $this->assetUrl('js/owl.carousel.min.js'); ?>"></script>
     <script src="<?= $this->assetUrl('js/main.js'); ?>"></script>
-    <?= $this->section('script');?>
+    <?= $this->section('script'); ?>
+    
 </body>
 </html>
+    
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+
+
+
+
